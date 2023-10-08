@@ -20,32 +20,44 @@ function build_maskMaterial(videoTransformMat2){
     3) select a radius: the bigger the radius the bigger the size of the deformed zone
     around your tearpoint will be
   */
-  const vertexShaderSource = `uniform mat2 videoTransformMat2;\n\
-  varying vec2 vUVvideo;\n\
-  // deformation 0 parameters:\n\
-  const vec2 TEARPOINT0 = vec2(-2.5,-2.5);\n\
-  const vec2 DISPLACEMENT0 = vec2(0.,0.15);\n\
-  const float RADIUS0 = 0.3;\n\
+    const vertexShaderSource = 
+    
+    `uniform mat2 videoTransformMat2;\n\
+    varying vec2 vUVvideo;\n\
+    // deformation 0 parameters:\n\
+    const vec2 TEARPOINT0 = vec2(-0.31,-0.72);\n\
+    const vec2 DISPLACEMENT0 = vec2(-0.22,-0.5);\n\
+    const float RADIUS0 = 0.1;\n\
 
-  
-  void main() {\n\
-    vec3 positionDeformed=position;\n\
-    
-    // apply deformation 0\n\
-    float deformFactor0 = 1.-smoothstep(0.0, RADIUS0, distance(TEARPOINT0, position.xy));\n\
-    positionDeformed.xy += deformFactor0 * DISPLACEMENT0;\n\
+    // deformation 1 parameters:\n\
+    const vec2 TEARPOINT1 = vec2(-0.27,-0.72);\n\
+    const vec2 DISPLACEMENT1 = vec2(-0.22,-0.7);\n\
+    const float RADIUS1 = 0.3;\n\
 
-    
-    // project deformed point:\n\
-    vec4 mvPosition = modelViewMatrix * vec4( positionDeformed, 1.0 );\n\
-    vec4 projectedPosition=projectionMatrix * mvPosition;\n\
-    gl_Position=projectedPosition;\n\
-    
-    // compute UV coordinates on the video texture:\n\
-    vec4 mvPosition0 = modelViewMatrix * vec4( position, 1.0 );\n\
-    vec4 projectedPosition0 = projectionMatrix * mvPosition0;\n\
-    vUVvideo = vec2(0.5) + videoTransformMat2 * projectedPosition0.xy / projectedPosition0.w;\n\
-  }`;
+    // deformation 2 parameters:\n\
+    const vec2 TEARPOINT2 = vec2(-0.3, -0.62);\n\
+    const vec2 DISPLACEMENT2 = vec2(-0.23,-0.2);\n\
+    const float RADIUS2 = 0.4;\n\
+    void main() {\n\
+      vec3 positionDeformed=position;\n\
+      // apply deformation 0\n\
+      float deformFactor0 = 1.-smoothstep(0.0, RADIUS0, distance(TEARPOINT0, position.xy));\n\
+      positionDeformed.xy += deformFactor0 * DISPLACEMENT0;\n\
+      
+      // apply deformation 2\n\
+      float deformFactor2 = 1. - smoothstep(0.0, RADIUS2, distance(TEARPOINT2, position.xy));\n\
+      positionDeformed.xy += deformFactor2 * DISPLACEMENT2;\n\
+
+      // project deformed point:\n\
+      vec4 mvPosition = modelViewMatrix * vec4( positionDeformed, 1.0 );\n\
+      vec4 projectedPosition=projectionMatrix * mvPosition;\n\
+      gl_Position=projectedPosition;\n\
+      // compute UV coordinates on the video texture:\n\
+      vec4 mvPosition0 = modelViewMatrix * vec4( position, 1.0 );\n\
+      vec4 projectedPosition0 = projectionMatrix * mvPosition0;\n\
+      vUVvideo = vec2(0.5) + videoTransformMat2 * projectedPosition0.xy / projectedPosition0.w;\n\
+    }`;
+
 
   const fragmentShaderSource = "precision mediump float;\n\
   uniform sampler2D samplerVideo;\n\
@@ -54,31 +66,25 @@ function build_maskMaterial(videoTransformMat2){
     gl_FragColor = texture2D(samplerVideo, vUVvideo);\n\
   }";
 
-
-    /*
-
-    // deformation 1 parameters:\n\
-    const vec2 TEARPOINT1 = vec2(-0.25,-0.4);\n\
+  /* 
+// deformation 1 parameters:\n\
+    const vec2 TEARPOINT1 = vec2(0.25,-0.1);\n\
     const vec2 DISPLACEMENT1 = vec2(0.12,-0.07);\n\
-    const float RADIUS1 = 0.3;\n\
-    // deformation 2 parameters:\n\
-    const vec2 TEARPOINT2 = vec2(-0.25,-0.4);\n\
-    const vec2 DISPLACEMENT2 = vec2(-0.12,-0.07);\n\
-    const float RADIUS2 = 0.3;\n\ 
+    const float RADIUS1 = 0.2;\n\
 
-    */
+   */
 
      /* 
+            // apply deformation 1\n\
+      float deformFactor1 = 1.-smoothstep(0.0, RADIUS1, distance(TEARPOINT1, position.xy));\n\
+      positionDeformed.xy += deformFactor1 * DISPLACEMENT1;\n\
 
-    // apply deformation 1\n\
-    float deformFactor1 = 1.-smoothstep(0.0, RADIUS1, distance(TEARPOINT1, position.xy));\n\
-    positionDeformed.xy += deformFactor1 * DISPLACEMENT1;\n\
-   
-    // apply deformation 2\n\
-    float deformFactor2 = 1. - smoothstep(0.0, RADIUS2, distance(TEARPOINT2, position.xy));\n\
-    positionDeformed.xy += deformFactor2 * DISPLACEMENT2;\n\ 
-    
-    */
+      // apply deformation 2\n\
+      float deformFactor2 = 1. - smoothstep(0.0, RADIUS2, distance(TEARPOINT2, position.xy));\n\
+      positionDeformed.xy += deformFactor2 * DISPLACEMENT2;\n\
+
+      
+      */
 
   const mat = new THREE.ShaderMaterial({
     vertexShader: vertexShaderSource,
@@ -103,8 +109,7 @@ function init_threeScene(spec){
   */
   maskLoader.load('./models/faceLowPoly.json', function(maskBufferGeometry){
     maskBufferGeometry.computeVertexNormals();
-  //  const threeMask = new THREE.Mesh(maskBufferGeometry, build_maskMaterial(spec.videoTransformMat2));
-    const threeMask = new THREE.Mesh(maskBufferGeometry, new THREE.MeshBasicMaterial({color:0x000000}));
+    const threeMask = new THREE.Mesh(maskBufferGeometry, build_maskMaterial(spec.videoTransformMat2));
     threeMask.frustumCulled=false;
     threeMask.scale.multiplyScalar(1.2);
     threeMask.position.set(0,0.2,-0.5);
@@ -136,7 +141,7 @@ function init_faceFilter(videoSettings){
       if (errCode){
         console.log('AN ERROR HAPPENS. SORRY BRO :( . ERR =', errCode);
         return;
-      }
+      } 
 
       console.log('INFO: JEELIZFACEFILTER IS READY');
       init_threeScene(spec);
