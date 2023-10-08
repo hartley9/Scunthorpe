@@ -21,10 +21,10 @@ function init_threeScene(spec) {
     (geometry) => {
       const mat = new THREE.MeshBasicMaterial({
         // DEBUG: uncomment color, comment map and alphaMap
-        map: new THREE.TextureLoader().load('./models/myCanvas.png'),
+        map: new THREE.TextureLoader().load('./models/measles_ca.png'),
         //alphaMap: new THREE.TextureLoader().load('./models/football_makeup/alpha_map_256.png'),
         transparent: true,
-        opacity: 0.6
+        opacity: 0.35
       });
 
       const faceMesh = new THREE.Mesh(geometry, mat);
