@@ -105,7 +105,7 @@ function init_faceFilter(videoSettings){
   }); // end JEELIZFACEFILTER.init call
 }
 
-window.addEventListener('message', (event) => {
+/* window.addEventListener('message', (event) => {
   console.log('message recieved: ', event)
 
   if (event.data ==='takeImage'){
@@ -127,5 +127,5 @@ window.addEventListener('message', (event) => {
 
   }
 })
-
+ */
 window.addEventListener('load', main);
