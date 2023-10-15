@@ -111,7 +111,15 @@ window.addEventListener('message', (event) => {
   if (event.data ==='takeImage'){
     console.log('take image message recv in iframe');
 
-    window.parent.postMessage('iframeImage', '*')
+    let canvas = document.getElementById('jeeFaceFilterCanvas')
+    let canvasDataURL = canvas.toDataURL();
+
+    const messageToPost = {
+      id: 'iframeImage', 
+      data: canvasDataURL
+    }
+
+    window.parent.postMessage(messageToPost, '*')
 
   }
 })
