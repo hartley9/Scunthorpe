@@ -68,7 +68,7 @@ window.addEventListener('message', (event) => {
   if (event.data ==='takeImage'){
     console.log('take image message recv in iframe');
 
-    parent.postMessage('iframeImage', '*')
+    window.parent.postMessage('iframeImage', '*')
 
   }
 })
