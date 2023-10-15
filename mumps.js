@@ -11,7 +11,6 @@ function detect_callback(isDetected){
   }
 }
 
-
 function build_maskMaterial(videoTransformMat2){
   /*
     THIS IS WHERE THE DEFORMATIONS ARE BUILT:
@@ -19,15 +18,21 @@ function build_maskMaterial(videoTransformMat2){
     2) add a displacement(x, y) to deform the zone around your tearpoint
     3) select a radius: the bigger the radius the bigger the size of the deformed zone
     around your tearpoint will be
-  */
-    const vertexShaderSource = 
+    */
+
+    const vertexShaderSource = mumpsShaders[Math.floor(Math.random() * mumpsShaders.length)];
+
+    console.log('rand: ',  Math.floor(Math.random() * mumpsShaders.length))
+
+  
+    /* 
     
     `uniform mat2 videoTransformMat2;\n\
     varying vec2 vUVvideo;\n\
     // deformation 0 parameters:\n\
-    const vec2 TEARPOINT0 = vec2(-0.31,-0.72);\n\
-    const vec2 DISPLACEMENT0 = vec2(-0.22,-0.5);\n\
-    const float RADIUS0 = 0.1;\n\
+    const vec2 TEARPOINT0 = vec2(0.31,-0.62);\n\
+    const vec2 DISPLACEMENT0 = vec2(0.22,-0.5);\n\
+    const float RADIUS0 = 0.3;\n\
 
     // deformation 1 parameters:\n\
     const vec2 TEARPOINT1 = vec2(-0.27,-0.72);\n\
@@ -40,9 +45,7 @@ function build_maskMaterial(videoTransformMat2){
     const float RADIUS2 = 0.4;\n\
     void main() {\n\
       vec3 positionDeformed=position;\n\
-      // apply deformation 0\n\
-      float deformFactor0 = 1.-smoothstep(0.0, RADIUS0, distance(TEARPOINT0, position.xy));\n\
-      positionDeformed.xy += deformFactor0 * DISPLACEMENT0;\n\
+  
       
       // apply deformation 2\n\
       float deformFactor2 = 1. - smoothstep(0.0, RADIUS2, distance(TEARPOINT2, position.xy));\n\
@@ -56,8 +59,8 @@ function build_maskMaterial(videoTransformMat2){
       vec4 mvPosition0 = modelViewMatrix * vec4( position, 1.0 );\n\
       vec4 projectedPosition0 = projectionMatrix * mvPosition0;\n\
       vUVvideo = vec2(0.5) + videoTransformMat2 * projectedPosition0.xy / projectedPosition0.w;\n\
-    }`;
-
+    }`; */
+ 
 
   const fragmentShaderSource = "precision mediump float;\n\
   uniform sampler2D samplerVideo;\n\
@@ -65,6 +68,10 @@ function build_maskMaterial(videoTransformMat2){
   void main() {\n\
     gl_FragColor = texture2D(samplerVideo, vUVvideo);\n\
   }";
+
+      /* // apply deformation 0\n\
+      float deformFactor0 = 1.-smoothstep(0.0, RADIUS0, distance(TEARPOINT0, position.xy));\n\
+      positionDeformed.xy += deformFactor0 * DISPLACEMENT0;\n\ */
 
   /* 
 // deformation 1 parameters:\n\
