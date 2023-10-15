@@ -62,4 +62,7 @@ function init_faceFilter(videoSettings){
 }
 
 
+window.addEventListener('message', (event) => {console.log('message recieved: ', event)})
+
+
 window.addEventListener('load', main);
