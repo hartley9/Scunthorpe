@@ -62,7 +62,16 @@ function init_faceFilter(videoSettings){
 }
 
 
-window.addEventListener('message', (event) => {console.log('message recieved: ', event)})
+window.addEventListener('message', (event) => {
+  console.log('message recieved: ', event)
+
+  if (event.data ==='takeImage'){
+    console.log('take image message recv in iframe');
+
+    parent.postMessage('iframeImage', '*')
+
+  }
+})
 
 
 window.addEventListener('load', main);
