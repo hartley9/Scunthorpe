@@ -21,15 +21,16 @@ function init_threeScene(spec) {
     (geometry) => {
       const mat = new THREE.MeshBasicMaterial({
         // DEBUG: uncomment color, comment map and alphaMap
-        map: new THREE.TextureLoader().load('./models/measles_ca.png'),
+        map: new THREE.TextureLoader().load('./models/vaccsFaceTextureEdit.png'),
         //alphaMap: new THREE.TextureLoader().load('./models/football_makeup/alpha_map_256.png'),
         transparent: true,
         opacity: 0.35
       });
 
       const faceMesh = new THREE.Mesh(geometry, mat);
-      faceMesh.position.y += 0.15;
-      faceMesh.position.z -= 0.19;
+      faceMesh.scale.x = 1.1
+      faceMesh.position.y += 0.25;
+      faceMesh.position.z -= 0.69;
 
       addDragEventListener(faceMesh);
 
