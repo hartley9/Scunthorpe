@@ -20,7 +20,7 @@ function build_maskMaterial(videoTransformMat2){
     around your tearpoint will be
     */
 
-    const vertexShaderSource = mumpsShaders[Math.floor(Math.random() * mumpsShaders.length)];
+    const vertexShaderSource = mumpsShaders[0]; //mumpsShaders[Math.floor(Math.random() * mumpsShaders.length)];
 
     console.log('rand: ',  Math.floor(Math.random() * mumpsShaders.length))
 
@@ -68,30 +68,6 @@ function build_maskMaterial(videoTransformMat2){
   void main() {\n\
     gl_FragColor = texture2D(samplerVideo, vUVvideo);\n\
   }";
-
-      /* // apply deformation 0\n\
-      float deformFactor0 = 1.-smoothstep(0.0, RADIUS0, distance(TEARPOINT0, position.xy));\n\
-      positionDeformed.xy += deformFactor0 * DISPLACEMENT0;\n\ */
-
-  /* 
-// deformation 1 parameters:\n\
-    const vec2 TEARPOINT1 = vec2(0.25,-0.1);\n\
-    const vec2 DISPLACEMENT1 = vec2(0.12,-0.07);\n\
-    const float RADIUS1 = 0.2;\n\
-
-   */
-
-     /* 
-            // apply deformation 1\n\
-      float deformFactor1 = 1.-smoothstep(0.0, RADIUS1, distance(TEARPOINT1, position.xy));\n\
-      positionDeformed.xy += deformFactor1 * DISPLACEMENT1;\n\
-
-      // apply deformation 2\n\
-      float deformFactor2 = 1. - smoothstep(0.0, RADIUS2, distance(TEARPOINT2, position.xy));\n\
-      positionDeformed.xy += deformFactor2 * DISPLACEMENT2;\n\
-
-      
-      */
 
   const mat = new THREE.ShaderMaterial({
     vertexShader: vertexShaderSource,

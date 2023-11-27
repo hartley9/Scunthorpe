@@ -1,4 +1,13 @@
+
+import {
+  GLTFExporter
+} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/exporters/GLTFExporter.js';
+
+
 let THREECAMERA = null;
+
+const exporter = new GLTFExporter();
+
 
 // callback: launched if a face is detected or lost
 function detect_callback(isDetected) {
@@ -8,6 +17,45 @@ function detect_callback(isDetected) {
     console.log('INFO in detect_callback(): LOST');
   }
 }
+
+
+function save(blob, filename) {
+
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+
+  // URL.revokeObjectURL( url ); breaks Firefox...
+
+}
+
+
+function saveString(text, filename) {
+
+  save(new Blob([text], {
+    type: 'text/plain'
+  }), filename);
+}
+
+const link = document.createElement('a');
+link.style.display = 'none';
+document.body.appendChild(link); // Firefox workaround, see #6594
+
+
+
+
+function exportModel(model){
+  const exporter = new GLTFExporter();
+// Parse the input and generate the glTF output
+
+exporter.parse(model, function(gltf) {
+
+  const output = JSON.stringify( gltf, null, 2 );
+  saveString( output, 'model.gltf' );
+}, {});
+
+} 
+
 
 // build the 3D. called once when Jeeliz Face Filter is OK
 function init_threeScene(spec) {
@@ -24,18 +72,28 @@ function init_threeScene(spec) {
         map: new THREE.TextureLoader().load('./models/measles_ca.png'),
         //alphaMap: new THREE.TextureLoader().load('./models/football_makeup/alpha_map_256.png'),
         transparent: true,
-        opacity: 0.35
+        opacity: 0.20
       });
 
       const faceMesh = new THREE.Mesh(geometry, mat);
+
+      const basicMat = new THREE.MeshBasicMaterial({color: '0xffffff'})
+      const faceMeshCopy = new THREE.Mesh(geometry, basicMat)
+
+     // exportModel(faceMeshCopy);
+
       faceMesh.position.y += 0.15;
       faceMesh.position.z -= 0.19;
 
       addDragEventListener(faceMesh);
 
       threeStuffs.faceObject.add(faceMesh);
+
     }
   )
+
+
+  setInterval(() => {console.log('faceobj: ', threeStuffs.faceObject)}, 500)
 
   // CREATE THE VIDEO BACKGROUND
   function create_mat2d(threeTexture, isTransparent){ //MT216 : we put the creation of the video material in a func because we will also use it for the frame
@@ -104,6 +162,9 @@ function init_faceFilter(videoSettings){
     } // end callbackTrack()
   }); // end JEELIZFACEFILTER.init call
 }
+
+//exporter();
+
 
 /* window.addEventListener('message', (event) => {
   console.log('message recieved: ', event)
