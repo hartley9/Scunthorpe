@@ -42,7 +42,8 @@ link.style.display = 'none';
 document.body.appendChild(link); // Firefox workaround, see #6594
 
 
-
+let faceMesh;
+let threeStuffs;
 
 function exportModel(model){
   const exporter = new GLTFExporter();
@@ -59,7 +60,7 @@ exporter.parse(model, function(gltf) {
 
 // build the 3D. called once when Jeeliz Face Filter is OK
 function init_threeScene(spec) {
-  const threeStuffs = JeelizThreeHelper.init(spec, detect_callback);
+  threeStuffs = JeelizThreeHelper.init(spec, detect_callback);
 
   // Add our face model:
   const loader = new THREE.BufferGeometryLoader();
@@ -69,21 +70,17 @@ function init_threeScene(spec) {
     (geometry) => {
       const mat = new THREE.MeshBasicMaterial({
         // DEBUG: uncomment color, comment map and alphaMap
-        map: new THREE.TextureLoader().load('./models/measles_ca.png'),
+        map: new THREE.TextureLoader().load('./models/vaccsFaceTextureEdit.png'),
         //alphaMap: new THREE.TextureLoader().load('./models/football_makeup/alpha_map_256.png'),
         transparent: true,
-        opacity: 0.20
+        opacity: 0.23
       });
 
-      const faceMesh = new THREE.Mesh(geometry, mat);
-
-      const basicMat = new THREE.MeshBasicMaterial({color: '0xffffff'})
-      const faceMeshCopy = new THREE.Mesh(geometry, basicMat)
-
-     // exportModel(faceMeshCopy);
-
-      faceMesh.position.y += 0.15;
+      faceMesh = new THREE.Mesh(geometry, mat);
+      faceMesh.position.y += 0.25;
       faceMesh.position.z -= 0.19;
+
+      faceMesh.visible = false;
 
       addDragEventListener(faceMesh);
 
@@ -93,7 +90,60 @@ function init_threeScene(spec) {
   )
 
 
-  setInterval(() => {console.log('faceobj: ', threeStuffs.faceObject)}, 500)
+  /* setInterval(() => {
+    console.log('faceobj: ', threeStuffs.faceObject)
+    isFaceVerifyChanged();
+  }, 500) */
+
+  let faceDetected = false;
+
+  let posXLower = -0.5;
+  let posXUpper = 0.5;
+  let seenSmallest = 0;
+  let seenHighest = 0;
+  let faceCheckCount = 0;
+  let faceCheckLimit = 50;
+  let faceChecked = false;
+
+  let faceCheckInterval = setInterval(()=>{
+    verifyFace();
+  }, 100)
+  
+
+
+
+  function verifyFace(){
+
+    let faceObj = threeStuffs.faceObject
+
+
+    console.log('rot: ', faceObj.rotation)
+
+    console.log('mesh: ', faceObj)
+
+    // set smallest
+    if (faceObj.rotation.y < seenSmallest){
+      seenSmallest = faceObj.rotation.y
+    }
+
+    // set largest
+    if (faceObj.rotation.y > seenHighest){
+      seenHighest = faceObj.rotation.y; 
+    }
+
+    faceCheckCount++;
+
+    if (faceCheckCount > faceCheckLimit){
+      clearInterval(faceCheckInterval);
+
+      console.log('seen highest: ', seenHighest);
+      console.log('seen smallest: ', seenSmallest);
+
+      if (seenHighest >= posXUpper && seenSmallest <= posXLower){
+        faceMesh.visible = true;
+      }
+    }
+  }
 
   // CREATE THE VIDEO BACKGROUND
   function create_mat2d(threeTexture, isTransparent){ //MT216 : we put the creation of the video material in a func because we will also use it for the frame
