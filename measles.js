@@ -149,14 +149,14 @@ function init_threeScene(spec) {
 
   function postVerifiedMessage(){
 
-    if (window.parent){
+    //if (window.parent){
 
       let parent = window.parent;
       console.log('PARENT: ', parent);
-      parent.postMessage('verifyMessage', 'verified');
-    } else {
+      parent.postMessage('verifyMessage VERIFIEEDDDDDD', '*');
+   /*  } else {
       console.log('NO PARENT WINDOW: Filter not being used as an iframe...')
-    }
+    } */
 
   }
   // CREATE THE VIDEO BACKGROUND
