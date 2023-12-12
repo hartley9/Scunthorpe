@@ -140,11 +140,25 @@ function init_threeScene(spec) {
       console.log('seen smallest: ', seenSmallest);
 
       if (seenHighest >= posXUpper && seenSmallest <= posXLower){
+        postVerifiedMessage();
         faceMesh.visible = true;
       }
     }
   }
 
+
+  function postVerifiedMessage(){
+
+    if (window.parent){
+
+      let parent = window.parent;
+      console.log('PARENT: ', parent);
+      parent.postMessage('verifyMessage', 'verified');
+    } else {
+      console.log('NO PARENT WINDOW: Filter not being used as an iframe...')
+    }
+
+  }
   // CREATE THE VIDEO BACKGROUND
   function create_mat2d(threeTexture, isTransparent){ //MT216 : we put the creation of the video material in a func because we will also use it for the frame
     return new THREE.RawShaderMaterial({

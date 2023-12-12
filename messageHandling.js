@@ -15,9 +15,7 @@ window.addEventListener('message', (event) => {
     
         window.parent.postMessage(messageToPost, '*')
       })
-  
-      
-  
     }
   })
   
+
