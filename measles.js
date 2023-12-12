@@ -153,7 +153,8 @@ function init_threeScene(spec) {
 
       let parent = window.parent;
       console.log('PARENT: ', parent);
-      parent.postMessage('verifyMessage VERIFIEEDDDDDD', '*');
+      console.log('sending msg...')
+      parent.postMessage("message", "*");
    /*  } else {
       console.log('NO PARENT WINDOW: Filter not being used as an iframe...')
     } */
