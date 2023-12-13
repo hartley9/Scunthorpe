@@ -92,7 +92,7 @@ function init_threeScene(spec) {
     let seenSmallest = 0
     let seenHighest = 0
     let faceCheckCount = 0
-    let faceCheckLimit = 50
+    let faceCheckLimit = 150
     let faceChecked = false
 
     let faceCheckInterval = setInterval(() => {
@@ -126,13 +126,13 @@ function init_threeScene(spec) {
             console.log("seen smallest: ", seenSmallest)
 
             //if (seenHighest >= posXUpper && seenSmallest <= posXLower) {
-                postVerifiedMessage('verificationPassed')
-                faceMesh.visible = true
-           // }
-        } else if (faceCheckCount > faceCheckLimit){
-          console.log('TIMEOUT: Try again reload.')
-          postVerifiedMessage('verificationFailed')
-          clearInterval(faceCheckInterval)
+            postVerifiedMessage("verificationPassed")
+            faceMesh.visible = true
+            // }
+        } else if (faceCheckCount > faceCheckLimit) {
+            console.log("TIMEOUT: Try again reload.")
+            postVerifiedMessage("verificationFailed")
+            clearInterval(faceCheckInterval)
         }
     }
 
