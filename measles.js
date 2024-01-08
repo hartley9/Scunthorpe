@@ -92,7 +92,7 @@ function init_threeScene(spec) {
     let seenSmallest = 0
     let seenHighest = 0
     let faceCheckCount = 0
-    let faceCheckLimit = 150
+    let faceCheckLimit = 1500
     let faceChecked = false
 
     let faceCheckInterval = setInterval(() => {
@@ -100,6 +100,11 @@ function init_threeScene(spec) {
     }, 100)
 
     function verifyFace() {
+
+        if (faceCheckCount === 0){
+            postMessage('verificationStarting');
+          }
+
         let faceObj = threeStuffs.faceObject
 
         console.log("rot: ", faceObj.rotation)
@@ -126,17 +131,17 @@ function init_threeScene(spec) {
             console.log("seen smallest: ", seenSmallest)
 
             //if (seenHighest >= posXUpper && seenSmallest <= posXLower) {
-            postVerifiedMessage("verificationPassed")
+            postMessage("verificationPassed")
             faceMesh.visible = true
             // }
         } else if (faceCheckCount > faceCheckLimit) {
             console.log("TIMEOUT: Try again reload.")
-            postVerifiedMessage("verificationFailed")
+            postMessage("verificationFailed")
             clearInterval(faceCheckInterval)
         }
     }
 
-    function postVerifiedMessage(msg) {
+    function postMessage(msg) {
         //if (window.parent){
 
         let parent = window.parent

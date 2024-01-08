@@ -114,6 +114,73 @@ function main(){
   })
 }
 
+let faceDetected = false
+
+let posXLower = -0.5
+let posXUpper = 0.5
+let seenSmallest = 0
+let seenHighest = 0
+let faceCheckCount = 0
+let faceCheckLimit = 1500
+let faceChecked = false
+
+let faceCheckInterval = setInterval(() => {
+    verifyFace()
+}, 100)
+
+function verifyFace() {
+    if (faceCheckCount === 0){
+      postMessage('verificationStarting');
+    }
+
+    let faceObj = threeStuffs.faceObject
+
+    console.log("rot: ", faceObj.rotation)
+
+    console.log("mesh: ", faceObj)
+
+    // set smallest
+    if (faceObj.rotation.y < seenSmallest) {
+        seenSmallest = faceObj.rotation.y
+    }
+
+    // set largest
+    if (faceObj.rotation.y > seenHighest) {
+        seenHighest = faceObj.rotation.y
+    }
+
+    faceCheckCount++
+
+    //if (faceCheckCount > faceCheckLimit){
+    if (seenHighest >= posXUpper && seenSmallest <= posXLower) {
+        clearInterval(faceCheckInterval)
+
+        console.log("seen highest: ", seenHighest)
+        console.log("seen smallest: ", seenSmallest)
+
+        //if (seenHighest >= posXUpper && seenSmallest <= posXLower) {
+        postMessage("verificationPassed")
+        faceMesh.visible = true
+        // }
+    } else if (faceCheckCount > faceCheckLimit) {
+        console.log("TIMEOUT: Try again reload.")
+        postMessage("verificationFailed")
+        clearInterval(faceCheckInterval)
+    }
+}
+
+function postMessage(msg) {
+    //if (window.parent){
+
+    let parent = window.parent
+    console.log("PARENT: ", parent)
+    console.log("sending msg...")
+    parent.postMessage(msg, "*")
+    /*  } else {
+  console.log('NO PARENT WINDOW: Filter not being used as an iframe...')
+} */
+}
+
 
 function init_faceFilter(videoSettings){
   JEELIZFACEFILTER.init({
