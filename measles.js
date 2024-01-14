@@ -56,7 +56,7 @@ function init_threeScene(spec) {
     threeStuffs = JeelizThreeHelper.init(spec, detect_callback)
 
     // Add our face model:
-    const loader = new THREE.BufferGeometryLoader()
+    const loader = new THREE.BufferGeometryLoader();
 
     loader.load("./models/face.json", geometry => {
         const mat = new THREE.MeshBasicMaterial({
@@ -66,14 +66,17 @@ function init_threeScene(spec) {
             ),
             //alphaMap: new THREE.TextureLoader().load('./models/football_makeup/alpha_map_256.png'),
             transparent: true,
-            opacity: 0.23,
+            opacity: 0.3,
         })
 
         faceMesh = new THREE.Mesh(geometry, mat)
+        faceMesh.position.x += 0
         faceMesh.position.y += 0.25
-        faceMesh.position.z -= 0.19
+        faceMesh.position.z -= 0.35
 
         faceMesh.visible = false
+
+        //faceMesh.visible = true; // DEBUGGING
 
         addDragEventListener(faceMesh)
 

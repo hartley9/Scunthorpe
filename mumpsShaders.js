@@ -6,13 +6,13 @@ const mumpsShaders = [
     
     // deformation 1 parameters:\n\
     const vec2 TEARPOINT2 = vec2(-0.3, -0.72);\n\
-    const vec2 DISPLACEMENT2 = vec2(-0.2, -0.05);\n\
+    const vec2 DISPLACEMENT2 = vec2(-0.15, -0.05);\n\
     const float RADIUS2 = 0.4;\n\
 
 
     // deformation 2 parameters:\n\
     const vec2 TEARPOINT3 = vec2(0.3, -0.72);\n\
-    const vec2 DISPLACEMENT3 = vec2(0.2,-0.05);\n\
+    const vec2 DISPLACEMENT3 = vec2(0.15,-0.05);\n\
     const float RADIUS3 = 0.4;\n\
 
     // main
