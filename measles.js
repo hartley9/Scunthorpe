@@ -66,7 +66,7 @@ function init_threeScene(spec) {
             ),
             //alphaMap: new THREE.TextureLoader().load('./models/football_makeup/alpha_map_256.png'),
             transparent: true,
-            opacity: 0.3,
+            opacity: 0.5,
         })
 
         faceMesh = new THREE.Mesh(geometry, mat)
