@@ -2,6 +2,8 @@
 let THREECAMERA = null;
 
 
+let threeStuffs
+
 // callback: launched if a face is detected or lost
 function detect_callback(isDetected){
   if (isDetected){
@@ -83,7 +85,7 @@ function build_maskMaterial(videoTransformMat2){
 
 // build the 3D. called once when Jeeliz Face Filter is OK:
 function init_threeScene(spec){
-  const threeStuffs = JeelizThreeHelper.init(spec, detect_callback);
+  threeStuffs = JeelizThreeHelper.init(spec, detect_callback);
 
   // CREATE THE MASK:
   const maskLoader=new  THREE.BufferGeometryLoader();
