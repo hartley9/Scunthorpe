@@ -95,7 +95,7 @@ function init_threeScene(spec) {
     let seenSmallest = 0
     let seenHighest = 0
     let faceCheckCount = 0
-    let faceCheckLimit = 1500
+    let faceCheckLimit = 150000
     let faceChecked = false
 
     let faceCheckInterval = setInterval(() => {
